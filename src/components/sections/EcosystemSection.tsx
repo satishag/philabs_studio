@@ -1,0 +1,227 @@
+import { motion } from "framer-motion";
+import { useInView } from "framer-motion";
+import { useRef, useState } from "react";
+import { Palette, Cpu, Sparkles, ExternalLink, X } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+
+interface SectorCardProps {
+  icon: typeof Palette;
+  title: string;
+  description: string;
+  status: "active" | "coming-soon";
+  accentColor: "primary" | "secondary" | "accent";
+  index: number;
+  onClick?: () => void;
+}
+
+const SectorCard = ({ 
+  icon: Icon, 
+  title, 
+  description, 
+  status, 
+  accentColor,
+  index,
+  onClick 
+}: SectorCardProps) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const colorClasses = {
+    primary: "bg-primary/10 text-primary border-primary/20 hover:border-primary/40",
+    secondary: "bg-secondary/10 text-secondary border-secondary/20 hover:border-secondary/40",
+    accent: "bg-accent/10 text-accent border-accent/20 hover:border-accent/40",
+  };
+
+  const glowClasses = {
+    primary: "group-hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.3)]",
+    secondary: "group-hover:shadow-[0_20px_60px_-15px_hsl(var(--secondary)/0.3)]",
+    accent: "group-hover:shadow-[0_20px_60px_-15px_hsl(var(--accent)/0.3)]",
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 50 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7, delay: index * 0.2 }}
+      onClick={status === "active" ? onClick : undefined}
+      className={`
+        relative group glass rounded-3xl p-8 transition-all duration-500
+        ${status === "active" ? "cursor-pointer" : "cursor-default"}
+        ${glowClasses[accentColor]}
+      `}
+    >
+      {/* Status badge */}
+      <div className="absolute top-6 right-6">
+        {status === "active" ? (
+          <span className="flex items-center gap-2 text-xs font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
+            <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            Active
+          </span>
+        ) : (
+          <span className="text-xs font-medium text-muted-foreground bg-muted px-3 py-1 rounded-full">
+            Coming 2025
+          </span>
+        )}
+      </div>
+
+      {/* Icon */}
+      <div className={`
+        w-16 h-16 rounded-2xl flex items-center justify-center mb-6
+        ${colorClasses[accentColor]}
+        transition-all duration-300 group-hover:scale-110
+      `}>
+        <Icon className="w-8 h-8" />
+      </div>
+
+      {/* Content */}
+      <h3 className="text-2xl font-bold text-foreground mb-3">{title}</h3>
+      <p className="text-muted-foreground leading-relaxed mb-6">{description}</p>
+
+      {/* Action hint */}
+      {status === "active" && (
+        <div className="flex items-center gap-2 text-primary text-sm font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span>Explore</span>
+          <ExternalLink className="w-4 h-4" />
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
+export const EcosystemSection = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const sectors = [
+    {
+      icon: Palette,
+      title: "Custom Merchandise",
+      description: "Premium customizable products that bring your vision to life. From apparel to accessories, crafted with precision and style.",
+      status: "active" as const,
+      accentColor: "primary" as const,
+    },
+    {
+      icon: Cpu,
+      title: "Tech Innovations",
+      description: "Cutting-edge technology solutions for the modern world. Smart integrations and digital transformations.",
+      status: "coming-soon" as const,
+      accentColor: "secondary" as const,
+    },
+    {
+      icon: Sparkles,
+      title: "Creative Studio",
+      description: "Where imagination meets execution. Design, branding, and creative services that make an impact.",
+      status: "coming-soon" as const,
+      accentColor: "accent" as const,
+    },
+  ];
+
+  return (
+    <section className="relative py-32 px-6 overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute inset-0 bg-gradient-to-b from-card via-background to-card" />
+      <div className="absolute top-1/4 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-0 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
+
+      <div className="max-w-6xl mx-auto relative z-10">
+        {/* Header */}
+        <div ref={ref} className="text-center mb-16">
+          <motion.span
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6 }}
+            className="text-secondary font-medium tracking-widest uppercase text-sm mb-4 block"
+          >
+            Our Ecosystem
+          </motion.span>
+          
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-4xl md:text-5xl font-bold text-foreground mb-6"
+          >
+            Multi-Sector
+            <span className="gradient-text"> Innovation</span>
+          </motion.h2>
+          
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-lg text-muted-foreground max-w-2xl mx-auto"
+          >
+            Building a diverse portfolio of ventures, each designed to lead its sector 
+            with innovation and excellence.
+          </motion.p>
+        </div>
+
+        {/* Sector cards */}
+        <div className="grid md:grid-cols-3 gap-8">
+          {sectors.map((sector, index) => (
+            <SectorCard 
+              key={sector.title} 
+              {...sector} 
+              index={index}
+              onClick={() => setIsModalOpen(true)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Merchandise Modal */}
+      <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogContent className="sm:max-w-2xl glass border-primary/20">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold gradient-text">
+              Custom Merchandise
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-6 py-4">
+            {/* Hero image placeholder */}
+            <div className="relative aspect-video rounded-xl overflow-hidden bg-muted">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Palette className="w-16 h-16 text-primary/50" />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <p className="text-muted-foreground leading-relaxed">
+                Transform your ideas into premium merchandise. Our customizable products 
+                range from high-quality apparel to unique accessories, all crafted with 
+                attention to detail and delivered with excellence.
+              </p>
+
+              <div className="grid grid-cols-3 gap-4">
+                {["Premium Quality", "Custom Designs", "Fast Delivery"].map((feature) => (
+                  <div 
+                    key={feature}
+                    className="text-center p-4 rounded-xl bg-primary/5 border border-primary/10"
+                  >
+                    <span className="text-sm text-foreground font-medium">{feature}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <Button 
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+              onClick={() => {
+                // Link will be added later
+                setIsModalOpen(false);
+              }}
+            >
+              <ExternalLink className="w-4 h-4 mr-2" />
+              Visit Store (Coming Soon)
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </section>
+  );
+};
