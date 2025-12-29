@@ -82,12 +82,13 @@ export const HeroSection = () => {
               ]
             }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            className="inline-block rounded-full p-1"
+            className="inline-block rounded-full p-1 overflow-hidden w-32 h-32 md:w-40 md:h-40"
           >
             <img 
               src={philabsLogo} 
               alt="PhiLabs.studio Logo" 
-              className="w-32 h-32 md:w-40 md:h-40 object-contain"
+              className="w-full h-full object-cover block"
+              style={{ transform: 'scale(1.09)', transformOrigin: 'center' }}
             />
           </motion.div>
         </motion.div>
