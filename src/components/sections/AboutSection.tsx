@@ -1,77 +1,208 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef } from "react";
-import { Lightbulb, Target, Rocket, Globe, Linkedin, Twitter } from "lucide-react";
+import { useRef, useState } from "react";
+import { Lightbulb, Target, Rocket, Globe, Linkedin, Twitter, ChevronLeft, ChevronRight } from "lucide-react";
 
 const teamMembers = [
   {
     name: "Alex Chen",
     role: "Founder & CEO",
-    bio: "Visionary entrepreneur with 10+ years in tech innovation",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face",
+    bio: "Visionary entrepreneur with 10+ years in tech innovation. Passionate about building products that shape the future.",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=800&fit=crop&crop=face",
     linkedin: "#",
     twitter: "#",
   },
   {
     name: "Sarah Mitchell",
     role: "Chief Creative Officer",
-    bio: "Award-winning designer shaping brand experiences",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop&crop=face",
+    bio: "Award-winning designer shaping brand experiences. Leading creative vision across all PhiLabs ventures.",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=800&fit=crop&crop=face",
     linkedin: "#",
     twitter: "#",
   },
   {
     name: "Marcus Johnson",
     role: "Head of Operations",
-    bio: "Strategic leader driving scalable growth systems",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300&h=300&fit=crop&crop=face",
+    bio: "Strategic leader driving scalable growth systems. Building the infrastructure for global expansion.",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=800&fit=crop&crop=face",
     linkedin: "#",
     twitter: "#",
   },
 ];
 
-const TeamCard = ({
-  member,
-  index,
-}: {
-  member: typeof teamMembers[0];
-  index: number;
-}) => {
+const TeamCarousel = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+
+  const nextMember = () => {
+    setActiveIndex((prev) => (prev + 1) % teamMembers.length);
+  };
+
+  const prevMember = () => {
+    setActiveIndex((prev) => (prev - 1 + teamMembers.length) % teamMembers.length);
+  };
+
+  const getCardStyle = (index: number) => {
+    const diff = index - activeIndex;
+    const normalizedDiff = ((diff + teamMembers.length) % teamMembers.length);
+    const adjustedDiff = normalizedDiff > teamMembers.length / 2 ? normalizedDiff - teamMembers.length : normalizedDiff;
+
+    if (adjustedDiff === 0) {
+      return {
+        x: 0,
+        scale: 1,
+        zIndex: 30,
+        opacity: 1,
+        rotateY: 0,
+      };
+    } else if (adjustedDiff === 1 || adjustedDiff === -2) {
+      return {
+        x: 180,
+        scale: 0.85,
+        zIndex: 20,
+        opacity: 0.7,
+        rotateY: -15,
+      };
+    } else {
+      return {
+        x: -180,
+        scale: 0.85,
+        zIndex: 20,
+        opacity: 0.7,
+        rotateY: 15,
+      };
+    }
+  };
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 40 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.6, delay: index * 0.15 }}
-      className="glass glass-hover rounded-2xl p-6 group text-center"
+      initial={{ opacity: 0 }}
+      animate={isInView ? { opacity: 1 } : {}}
+      transition={{ duration: 0.8 }}
+      className="mt-32"
     >
-      <div className="relative w-24 h-24 mx-auto mb-4">
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary via-secondary to-accent opacity-50 blur-md group-hover:opacity-80 transition-opacity duration-300" />
-        <img
-          src={member.image}
-          alt={member.name}
-          className="relative w-24 h-24 rounded-full object-cover border-2 border-primary/30 group-hover:border-primary/60 transition-colors duration-300"
-        />
+      {/* Header */}
+      <div className="text-center mb-16">
+        <motion.span
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-primary font-medium tracking-widest uppercase text-sm mb-4 block"
+        >
+          Our Team
+        </motion.span>
+        <motion.h3
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground"
+        >
+          Meet The
+          <span className="gradient-text italic"> Visionaries</span>
+        </motion.h3>
       </div>
-      <h3 className="text-lg font-semibold text-foreground mb-1">{member.name}</h3>
-      <p className="text-primary text-sm font-medium mb-2">{member.role}</p>
-      <p className="text-muted-foreground text-sm mb-4">{member.bio}</p>
-      <div className="flex justify-center gap-3">
-        <a
-          href={member.linkedin}
-          className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors duration-300"
-        >
-          <Linkedin className="w-4 h-4 text-primary" />
-        </a>
-        <a
-          href={member.twitter}
-          className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors duration-300"
-        >
-          <Twitter className="w-4 h-4 text-primary" />
-        </a>
+
+      {/* Carousel Container */}
+      <div className="relative flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20">
+        {/* Cards Stack */}
+        <div className="relative w-full max-w-md h-[500px] perspective-1000">
+          {teamMembers.map((member, index) => {
+            const style = getCardStyle(index);
+            return (
+              <motion.div
+                key={member.name}
+                animate={style}
+                transition={{
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 30,
+                }}
+                className="absolute inset-0 cursor-pointer"
+                onClick={() => setActiveIndex(index)}
+                style={{ transformStyle: "preserve-3d" }}
+              >
+                <div className="relative w-full h-full rounded-3xl overflow-hidden group">
+                  {/* Image */}
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+                  {/* Glow effect on active */}
+                  {index === activeIndex && (
+                    <div className="absolute inset-0 rounded-3xl ring-2 ring-primary/50 shadow-[0_0_60px_rgba(168,85,247,0.3)]" />
+                  )}
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Info Panel */}
+        <div className="flex-1 max-w-md text-center lg:text-left">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h4 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+                {teamMembers[activeIndex].name}
+              </h4>
+              <p className="text-primary text-lg font-medium mb-4 tracking-wide">
+                {teamMembers[activeIndex].role}
+              </p>
+              <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+                {teamMembers[activeIndex].bio}
+              </p>
+
+              {/* Social Links */}
+              <div className="flex justify-center lg:justify-start gap-4 mb-8">
+                <a
+                  href={teamMembers[activeIndex].linkedin}
+                  className="w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-primary/20 transition-all duration-300 group"
+                >
+                  <Linkedin className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                </a>
+                <a
+                  href={teamMembers[activeIndex].twitter}
+                  className="w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-primary/20 transition-all duration-300 group"
+                >
+                  <Twitter className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                </a>
+              </div>
+
+              {/* Navigation */}
+              <div className="flex items-center justify-center lg:justify-start gap-6">
+                <button
+                  onClick={prevMember}
+                  className="w-14 h-14 rounded-full glass flex items-center justify-center hover:bg-primary/20 transition-all duration-300 group"
+                >
+                  <ChevronLeft className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                </button>
+                <span className="text-muted-foreground font-mono tracking-wider">
+                  <span className="text-foreground font-semibold">{String(activeIndex + 1).padStart(2, '0')}</span>
+                  <span className="mx-2">/</span>
+                  <span>{String(teamMembers.length).padStart(2, '0')}</span>
+                </span>
+                <button
+                  onClick={nextMember}
+                  className="w-14 h-14 rounded-full glass flex items-center justify-center hover:bg-primary/20 transition-all duration-300 group"
+                >
+                  <ChevronRight className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
+                </button>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </motion.div>
   );
@@ -248,30 +379,8 @@ export const AboutSection = () => {
           ))}
         </div>
 
-        {/* Team section */}
-        <div className="mt-32">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <span className="text-primary font-medium tracking-widest uppercase text-sm mb-4 block">
-              Our Team
-            </span>
-            <h3 className="text-3xl md:text-4xl font-bold text-foreground">
-              The Minds Behind
-              <span className="gradient-text"> PhiLabs</span>
-            </h3>
-          </motion.div>
-          
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {teamMembers.map((member, index) => (
-              <TeamCard key={member.name} member={member} index={index} />
-            ))}
-          </div>
-        </div>
+        {/* Team Carousel */}
+        <TeamCarousel />
       </div>
     </section>
   );
