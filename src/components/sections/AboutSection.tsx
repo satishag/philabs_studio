@@ -1,7 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState ,useEffect} from "react";
 import { Lightbulb, Target, Rocket, Globe, Linkedin, Twitter, ChevronLeft, ChevronRight } from "lucide-react";
+/* ---------------- TEAM DATA ---------------- */
 
 const teamMembers = [
   {
@@ -30,49 +31,49 @@ const teamMembers = [
   },
 ];
 
+/* ---------------- SINE WAVE COMPONENT ---------------- */
+
 const TeamCarousel = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  useEffect(() => {
+  const interval = setInterval(() => {
+    setActiveIndex((prev) => (prev + 1) % teamMembers.length);
+  }, 3000); // 3 seconds
+
+  return () => clearInterval(interval);
+}, []);
+
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
-  const nextMember = () => {
-    setActiveIndex((prev) => (prev + 1) % teamMembers.length);
-  };
+  const nextMember = () =>
+    setActiveIndex((i) => (i + 1) % teamMembers.length);
+  const prevMember = () =>
+    setActiveIndex((i) => (i - 1 + teamMembers.length) % teamMembers.length);
 
-  const prevMember = () => {
-    setActiveIndex((prev) => (prev - 1 + teamMembers.length) % teamMembers.length);
-  };
-
+  /* PAGE-TURN LOGIC (NO SLIDING) */
   const getCardStyle = (index: number) => {
-    const diff = index - activeIndex;
-    const normalizedDiff = ((diff + teamMembers.length) % teamMembers.length);
-    const adjustedDiff = normalizedDiff > teamMembers.length / 2 ? normalizedDiff - teamMembers.length : normalizedDiff;
-
-    if (adjustedDiff === 0) {
+    if (index === activeIndex) {
       return {
-        x: 0,
-        scale: 1,
-        zIndex: 30,
-        opacity: 1,
         rotateY: 0,
-      };
-    } else if (adjustedDiff === 1 || adjustedDiff === -2) {
-      return {
-        x: 180,
-        scale: 0.85,
-        zIndex: 20,
-        opacity: 0.7,
-        rotateY: -15,
-      };
-    } else {
-      return {
-        x: -180,
-        scale: 0.85,
-        zIndex: 20,
-        opacity: 0.7,
-        rotateY: 15,
+        opacity: 1,
+        zIndex: 30,
       };
     }
+
+    if (index < activeIndex) {
+      return {
+        rotateY: -90,
+        opacity: 0,
+        zIndex: 10,
+      };
+    }
+
+    return {
+      rotateY: 90,
+      opacity: 0,
+      zIndex: 10,
+    };
   };
 
   return (
@@ -83,129 +84,100 @@ const TeamCarousel = () => {
       transition={{ duration: 0.8 }}
       className="mt-32"
     >
-      {/* Header */}
+      {/* HEADER */}
       <div className="text-center mb-16">
-        <motion.span
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-primary font-medium tracking-widest uppercase text-sm mb-4 block"
-        >
+        <span className="text-primary tracking-widest uppercase text-sm block mb-4">
           Our Team
-        </motion.span>
-        <motion.h3
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground"
-        >
-          Meet The
-          <span className="gradient-text italic"> Visionaries</span>
-        </motion.h3>
+        </span>
+        <h3 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground">
+          Meet The <span className="gradient-text italic">Visionaries</span>
+        </h3>
       </div>
 
-      {/* Carousel Container */}
+      {/* MAIN LAYOUT */}
       <div className="relative flex flex-col lg:flex-row items-center justify-center gap-12 lg:gap-20">
-        {/* Cards Stack */}
+        {/* IMAGE AREA */}
         <div className="relative w-full max-w-md h-[500px] perspective-1000">
-          {teamMembers.map((member, index) => {
-            const style = getCardStyle(index);
-            return (
-              <motion.div
-                key={member.name}
-                animate={style}
-                transition={{
-                  type: "spring",
-                  stiffness: 300,
-                  damping: 30,
-                }}
-                className="absolute inset-0 cursor-pointer"
-                onClick={() => setActiveIndex(index)}
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                <div className="relative w-full h-full rounded-3xl overflow-hidden group">
-                  {/* Image */}
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover"
-                  />
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-                  {/* Glow effect on active */}
-                  {index === activeIndex && (
-                    <div className="absolute inset-0 rounded-3xl ring-2 ring-primary/50 shadow-[0_0_60px_rgba(168,85,247,0.3)]" />
-                  )}
-                </div>
-              </motion.div>
-            );
-          })}
+          {teamMembers.map((member, index) => (
+            <motion.div
+              key={member.name}
+              animate={getCardStyle(index)}
+              transition={{ duration: 0.8, ease: "easeInOut" }}
+              className="absolute inset-0"
+              style={{
+                transformStyle: "preserve-3d",
+                transformOrigin: "right center",
+              }}
+            >
+              <img
+                src={member.image}
+                alt={member.name}
+                className="w-full h-full object-cover rounded-3xl"
+              />
+            </motion.div>
+          ))}
         </div>
 
-        {/* Info Panel */}
+        {/* INFO PANEL (NO OVERLAP) */}
         <div className="flex-1 max-w-md text-center lg:text-left">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeIndex}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <h4 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+              <h4 className="text-3xl md:text-4xl font-bold mb-2">
                 {teamMembers[activeIndex].name}
               </h4>
-              <p className="text-primary text-lg font-medium mb-4 tracking-wide">
+              <p className="text-primary text-lg font-medium mb-4">
                 {teamMembers[activeIndex].role}
               </p>
-              <p className="text-muted-foreground text-lg leading-relaxed mb-6">
+              <p className="text-muted-foreground text-lg mb-6">
                 {teamMembers[activeIndex].bio}
               </p>
 
-              {/* Social Links */}
-              <div className="flex justify-center lg:justify-start gap-4 mb-8">
-                <a
-                  href={teamMembers[activeIndex].linkedin}
-                  className="w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-primary/20 transition-all duration-300 group"
-                >
-                  <Linkedin className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+              {/* SOCIAL */}
+              <div className="flex justify-center lg:justify-start gap-4 mb-6">
+                <a href={teamMembers[activeIndex].linkedin}>
+                  <Linkedin />
                 </a>
-                <a
-                  href={teamMembers[activeIndex].twitter}
-                  className="w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-primary/20 transition-all duration-300 group"
-                >
-                  <Twitter className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <a href={teamMembers[activeIndex].twitter}>
+                  <Twitter />
                 </a>
               </div>
 
-              {/* Navigation */}
-              <div className="flex items-center justify-center lg:justify-start gap-6">
-                <button
-                  onClick={prevMember}
-                  className="w-14 h-14 rounded-full glass flex items-center justify-center hover:bg-primary/20 transition-all duration-300 group"
-                >
-                  <ChevronLeft className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                </button>
-                <span className="text-muted-foreground font-mono tracking-wider">
-                  <span className="text-foreground font-semibold">{String(activeIndex + 1).padStart(2, '0')}</span>
-                  <span className="mx-2">/</span>
-                  <span>{String(teamMembers.length).padStart(2, '0')}</span>
-                </span>
-                <button
-                  onClick={nextMember}
-                  className="w-14 h-14 rounded-full glass flex items-center justify-center hover:bg-primary/20 transition-all duration-300 group"
-                >
-                  <ChevronRight className="w-6 h-6 text-muted-foreground group-hover:text-primary transition-colors" />
-                </button>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </div>
-    </motion.div>
-  );
+              {/* STATIC DOTTED LINE */}
+              <svg width="280" height="40" viewBox="0 0 280 40">
+  <g>
+    {Array.from({ length: 11 }).map((_, i) => (
+      <motion.circle
+        key={i}
+        cx={20 + i * 25}
+        cy={20}
+        r={2.5}
+        fill="#999"
+        animate={{
+          y: [0, -8, 0, 8, 0],
+          opacity: i === activeIndex ? 1 : 0.6,
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          delay: i * 0.15,
+          ease: "easeInOut",
+        }}
+      />
+    ))}
+  </g>
+  </svg>
+  </motion.div>
+  </AnimatePresence>
+ </div>
+ </div>
+</motion.div>
+);
 };
 
 const values = [
@@ -378,6 +350,7 @@ export const AboutSection = () => {
             <ValueCard key={value.title} {...value} index={index} />
           ))}
         </div>
+        
 
         {/* Team Carousel */}
         <TeamCarousel />

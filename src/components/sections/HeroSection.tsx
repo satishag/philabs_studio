@@ -88,7 +88,7 @@ export const HeroSection = () => {
               src={philabsLogo} 
               alt="PhiLabs.studio Logo" 
               className="w-full h-full object-cover block"
-              style={{ transform: 'scale(1.09)', transformOrigin: 'center' }}
+              style={{ transform: 'scale(1.275)', transformOrigin: 'center' }}
             />
           </motion.div>
         </motion.div>
