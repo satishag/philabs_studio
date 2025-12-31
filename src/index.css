@@ -3,55 +3,90 @@
 @tailwind utilities;
 
 @layer base {
+  /* Light theme (default) */
   :root {
-    /* Dark theme foundation */
-    --background: 240 10% 4%;
-    --foreground: 210 40% 98%;
-    
-    --card: 240 10% 6%;
-    --card-foreground: 210 40% 98%;
-    
-    --popover: 240 10% 6%;
-    --popover-foreground: 210 40% 98%;
-    
-    /* Accent: Electric Violet */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+
+    --card: 210 40% 98%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Accent colors (shared between themes) */
     --primary: 270 80% 60%;
-    --primary-foreground: 210 40% 98%;
-    
-    /* Secondary: Cyan */
+    --primary-foreground: 0 0% 100%;
+
     --secondary: 185 80% 50%;
-    --secondary-foreground: 210 40% 98%;
-    
-    /* Muted dark surfaces */
-    --muted: 240 10% 12%;
-    --muted-foreground: 215 20% 65%;
-    
-    /* Accent: Warm orange from logo */
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 20% 40%;
+
     --accent: 25 95% 55%;
-    --accent-foreground: 210 40% 98%;
-    
+    --accent-foreground: 0 0% 100%;
+
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    
-    --border: 240 10% 15%;
-    --input: 240 10% 15%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 14% 90%;
+    --input: 220 14% 96%;
     --ring: 270 80% 60%;
-    
+
     --radius: 0.75rem;
-    
-    /* Custom gradient colors */
-    --gradient-violet: 270 80% 50%;
-    --gradient-cyan: 185 80% 50%;
+
+    --gradient-violet: 270 80% 60%;
+    --gradient-cyan: 185 80% 55%;
     --gradient-orange: 25 95% 55%;
-    --gradient-deep-violet: 270 60% 20%;
-    --gradient-midnight: 215 50% 10%;
-    
-    /* Glow effects */
+    /* lighter, airy gradients for light mode */
+    --gradient-deep-violet: 270 85% 92%;
+    --gradient-midnight: 200 90% 96%;
+
     --glow-violet: 270 80% 60%;
     --glow-cyan: 185 80% 55%;
     --glow-orange: 25 95% 55%;
-    
-    /* Sidebar */
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 270 80% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 96%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 220 14% 90%;
+    --sidebar-ring: 270 80% 60%;
+  }
+
+  /* Dark theme overrides */
+  .dark {
+    --background: 240 10% 4%;
+    --foreground: 210 40% 98%;
+
+    --card: 240 10% 6%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 240 10% 6%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 270 80% 60%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 185 80% 50%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 240 10% 12%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 25 95% 55%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 240 10% 15%;
+    --input: 240 10% 15%;
+    --ring: 270 80% 60%;
+
     --sidebar-background: 240 10% 4%;
     --sidebar-foreground: 210 40% 98%;
     --sidebar-primary: 270 80% 60%;
@@ -60,28 +95,9 @@
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 240 10% 15%;
     --sidebar-ring: 270 80% 60%;
-  }
-
-  .dark {
-    --background: 240 10% 4%;
-    --foreground: 210 40% 98%;
-    --card: 240 10% 6%;
-    --card-foreground: 210 40% 98%;
-    --popover: 240 10% 6%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 270 80% 60%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 185 80% 50%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 240 10% 12%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 25 95% 55%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 240 10% 15%;
-    --input: 240 10% 15%;
-    --ring: 270 80% 60%;
+    /* dark gradients for hero */
+    --gradient-deep-violet: 270 60% 20%;
+    --gradient-midnight: 215 50% 10%;
   }
 }
 
@@ -116,7 +132,18 @@
   .gradient-bg-hero {
     background: linear-gradient(
       135deg,
-      hsl(240 10% 4%) 0%,
+      hsl(var(--background)) 0%,
+      hsl(var(--gradient-deep-violet)) 50%,
+      hsl(var(--gradient-midnight)) 100%
+    );
+    transition: background-color 300ms ease, background 400ms ease;
+  }
+
+  /* ensure explicit dark-mode gradient override in case of specificity issues */
+  .dark .gradient-bg-hero {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--background)) 0%,
       hsl(var(--gradient-deep-violet)) 50%,
       hsl(var(--gradient-midnight)) 100%
     );
@@ -125,8 +152,8 @@
   .gradient-bg-section {
     background: linear-gradient(
       180deg,
-      hsl(240 10% 4%) 0%,
-      hsl(240 10% 6%) 100%
+      hsl(var(--background)) 0%,
+      hsl(var(--card)) 100%
     );
   }
 
@@ -149,7 +176,7 @@
 
   /* Glass morphism */
   .glass {
-    @apply bg-card/40 backdrop-blur-xl border border-border/50;
+    @apply bg-card/40 backdrop-blur-xl border border-border/50 shadow-sm;
   }
 
   .glass-hover {

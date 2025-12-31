@@ -29,7 +29,7 @@ const FloatingOrb = ({
 
 export const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden gradient-bg-hero">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden gradient-bg-hero bg-background transition-colors duration-500">
       {/* Animated orbs */}
       <FloatingOrb 
         className="bg-primary -top-20 -left-20" 
