@@ -2,6 +2,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef, useState ,useEffect} from "react";
 import { Lightbulb, Target, Rocket, Globe, Linkedin, Twitter, ChevronLeft, ChevronRight } from "lucide-react";
+import monika_photo from "@/assets/monika.jpeg";
+import varsha_photo from "@/assets/varsha.jpeg";
 /* ---------------- TEAM DATA ---------------- */
 
 const teamMembers = [
@@ -15,17 +17,25 @@ const teamMembers = [
   },
   {
     name: "Sarah Mitchell",
-    role: "Chief Creative Officer",
-    bio: "Award-winning designer shaping brand experiences. Leading creative vision across all PhiLabs ventures.",
+    role: "Chief Financial Officer",
+    bio: "Marketing Lead and Promotion. Leading creative vision across all PhiLabs ventures.",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=800&fit=crop&crop=face",
     linkedin: "#",
     twitter: "#",
   },
   {
-    name: "Marcus Johnson",
+    name: "Varsha Shubhashri M",
     role: "Head of Operations",
     bio: "Strategic leader driving scalable growth systems. Building the infrastructure for global expansion.",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=600&h=800&fit=crop&crop=face",
+    image: varsha_photo,
+    linkedin: "#",
+    twitter: "#",
+  },
+  {
+    name: "Monika R",
+    role: "Chief Creative Officer",
+    bio: "Award-winning designer shaping brand experiences. Leading creative vision across all PhiLabs ventures.",
+    image: monika_photo,
     linkedin: "#",
     twitter: "#",
   },

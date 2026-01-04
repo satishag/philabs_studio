@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { Palette, Cpu, Sparkles, ExternalLink, X } from "lucide-react";
+import { useRef, useState, useMemo } from "react";
+import { Palette, Cpu, Sparkles, ExternalLink, X, Shell, EarthLock, BarChart } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
@@ -47,7 +47,7 @@ const SectorCard = ({
       transition={{ duration: 0.7, delay: index * 0.2 }}
       onClick={status === "active" ? onClick : undefined}
       className={`
-        relative group glass rounded-3xl p-8 transition-all duration-500
+        relative group glass rounded-5xl p-8 transition-all duration-500 h-full flex flex-col justify-between overflow-hidden
         ${status === "active" ? "cursor-pointer" : "cursor-default"}
         ${glowClasses[accentColor]}
       `}
@@ -117,7 +117,54 @@ export const EcosystemSection = () => {
       status: "coming-soon" as const,
       accentColor: "accent" as const,
     },
+    {
+      icon: Shell,
+      title: "Supply Chain",
+      description: "End-to-end logistics and fulfillment ensuring timely delivery and scalable operations.",
+      status: "coming-soon" as const,
+      accentColor: "secondary" as const,
+    },
+    {
+      icon: EarthLock,
+      title: "Community Hub",
+      description: "Platform for creators and users to collaborate, share, and grow together.",
+      status: "coming-soon" as const,
+      accentColor: "accent" as const,
+    },
+    {
+      icon: BarChart,
+      title: "Analytics",
+      description: "Data-driven insights and dashboards to power decisions across the ecosystem.",
+      status: "coming-soon" as const,
+      accentColor: "primary" as const,
+    },
   ];
+
+  // keep active sectors first so actives are shown before coming-soon
+  const sortedSectors = useMemo(() => {
+    return [...sectors].sort((a, b) => {
+      if (a.status === "active" && b.status !== "active") return -1;
+      if (b.status === "active" && a.status !== "active") return 1;
+      return 0;
+    });
+  }, [sectors]);
+
+  // Fixed deterministic placements to match the bentobox layout (md+)
+  const placementClasses = useMemo(() => {
+    // Order matches `sortedSectors` so active sectors come first
+    return [
+      // Large hero block on the left (spans 2 cols x 2 rows)
+      "md:col-start-1 md:col-span-2 md:row-start-1 md:row-span-2",
+      // Top-right two cells
+      "md:col-start-3 md:row-start-1",
+      "md:col-start-4 md:row-start-1",
+      // Middle-right two cells
+      "md:col-start-1 md:row-start-2",
+      "md:col-start-2 md:row-start-2",
+      // Bottom-left under hero (spans 2 cols)
+      "md:col-start-3 md:col-span-2 md:row-start-2",
+    ];
+  }, []);
 
   return (
     <section className="relative py-32 px-6 overflow-hidden">
@@ -159,16 +206,21 @@ export const EcosystemSection = () => {
           </motion.p>
         </div>
 
-        {/* Sector cards */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {sectors.map((sector, index) => (
-            <SectorCard 
-              key={sector.title} 
-              {...sector} 
-              index={index}
-              onClick={() => setIsModalOpen(true)}
-            />
-          ))}
+        {/* Sector cards - Bentobox layout with randomized sizes (md+) */}
+        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-8 items-stretch">
+          {sortedSectors.map((sector, index) => {
+            const placeClass = placementClasses[index] ?? "md:col-span-1 md:row-span-1";
+
+            return (
+              <div key={sector.title} className={`h-full min-h-[180px] max-h-[360px] overflow-hidden ${placeClass}`}>
+                <SectorCard
+                  {...sector}
+                  index={index}
+                  onClick={() => setIsModalOpen(true)}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
 
