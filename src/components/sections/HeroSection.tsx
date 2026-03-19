@@ -112,7 +112,7 @@ export const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="text-xl md:text-2xl lg:text-3xl text-muted-foreground font-light mb-4 text-glow"
         >
-          Building Tomorrow's Ecosystem
+          Building Products for Today. Creating Ventures for Tomorrow.
         </motion.p>
 
         {/* Subtitle */}

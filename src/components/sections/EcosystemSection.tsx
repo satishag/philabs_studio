@@ -98,19 +98,19 @@ export const EcosystemSection = () => {
   const sectors = [
     {
       icon: Palette,
-      title: "Custom Merchandise",
-      description: "Premium customizable products that bring your vision to life. From apparel to accessories, crafted with precision and style.",
+      title: "CreateEvo",
+      description: "Customised merch, crafted with intent\nCreateEvo brings your brand and ideas to life through premium customised merchandise. From apparel to accessories, every product is made with precision, style, and a personal touch. Whether you're a startup, a college club, or a creator — we make your vision wearable.",
       status: "active" as const,
       accentColor: "primary" as const,
     },
     {
       icon: Cpu,
-      title: "Tech Innovations",
-      description: "Cutting-edge technology solutions for the modern world. Smart integrations and digital transformations.",
+      title: "VyaparaAI",
+      description: "CRM built for the backbone of the economy\nVyapara AI is an intelligent CRM platform designed specifically for small, medium businesses.\nPowered by AI, built for Karnataka.",
       status: "coming-soon" as const,
       accentColor: "secondary" as const,
     },
-    {
+    /*{
       icon: Sparkles,
       title: "Creative Studio",
       description: "Where imagination meets execution. Design, branding, and creative services that make an impact.",
@@ -137,7 +137,7 @@ export const EcosystemSection = () => {
       description: "Data-driven insights and dashboards to power decisions across the ecosystem.",
       status: "coming-soon" as const,
       accentColor: "primary" as const,
-    },
+    },*/
   ];
 
   // keep active sectors first so actives are shown before coming-soon
@@ -201,14 +201,13 @@ export const EcosystemSection = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg text-muted-foreground max-w-2xl mx-auto"
           >
-            Building a diverse portfolio of ventures, each designed to lead its sector 
-            with innovation and excellence.
+            Building ventures at perfect proportion<br></br>
+PhiLabs is a student-led innovation collective — four engineering minds crafting products that balance form, function, and impact.
           </motion.p>
         </div>
 
         {/* Sector cards - Bentobox layout with randomized sizes (md+) */}
-        <div className="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-8 items-stretch">
-          {sortedSectors.map((sector, index) => {
+        <div className="grid grid-cols-1 md:grid-cols-4 auto-rows-[180px] gap-8 items-stretch">  {sortedSectors.map((sector, index) => {
             const placeClass = placementClasses[index] ?? "md:col-span-1 md:row-span-1";
 
             return (
@@ -274,6 +273,27 @@ export const EcosystemSection = () => {
           </div>
         </DialogContent>
       </Dialog>
+      {/* Vision statement */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="mt-24 text-center"
+        >
+          <div className="glass rounded-3xl p-12 max-w-3xl mx-auto relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
+            <blockquote className="relative z-10">
+              <p className="text-2xl md:text-3xl font-light text-foreground leading-relaxed mb-6">
+               "We believe every great product begins with the 
+                <span className="gradient-text font-medium"> ecosystems </span>
+                right proportions — of ambition, empathy, and execution."
+              </p>
+              <footer className="text-muted-foreground">
+                — The PhiLabs.studio Team
+              </footer>
+            </blockquote>
+          </div>
+        </motion.div>
     </section>
   );
 };

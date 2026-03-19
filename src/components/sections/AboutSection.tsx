@@ -208,8 +208,8 @@ const values = [
   },
   {
     icon: Globe,
-    title: "Global Vision",
-    description: "Building for a worldwide ecosystem",
+    title: "Glocal Vision",
+    description: "Driven Globally,\nRooted Locally",
   },
 ];
 
@@ -282,9 +282,9 @@ export const AboutSection = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="text-lg text-muted-foreground leading-relaxed mb-6"
             >
-              PhiLabs.studio is a fast-growing venture studio building innovative products 
-              across multiple sectors. We combine bold vision with meticulous execution 
-              to create solutions that shape tomorrow's landscape.
+              PhiLabs.studio is a growing venture studio building innovative products 
+              across multiple sectors.
+              Four engineers, one guiding ratio
             </motion.p>
             
             <motion.p
@@ -293,9 +293,8 @@ export const AboutSection = () => {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="text-muted-foreground/80 leading-relaxed"
             >
-              From customizable merchandise to emerging technologies, we're not just 
-              following trends—we're setting them. Every venture we launch carries 
-              our commitment to quality, innovation, and global impact.
+PhiLabs was born from a simple belief: the best products, like nature's most beautiful structures, follow principles of harmony and proportion. We're a tight-knit team — four engineerers with a drive to build real things. We don't just prototype. We ship. Every venture we launch carries the DNA of our founding philosophy — precision, beauty, and purpose in equal measure.
+
             </motion.p>
           </div>
 

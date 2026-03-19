@@ -2,7 +2,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { HeroSection } from "@/components/sections/HeroSection";
 import { AboutSection } from "@/components/sections/AboutSection";
 import { EcosystemSection } from "@/components/sections/EcosystemSection";
-import { VisionSection } from "@/components/sections/VisionSection";
+//import { VisionSection } from "@/components/sections/VisionSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 
 const Index = () => {
@@ -17,9 +17,9 @@ const Index = () => {
         <section id="ecosystem">
           <EcosystemSection />
         </section>
-        <section id="vision">
+        {/* <section id="vision">
           <VisionSection />
-        </section>
+        </section> */}
         <section id="contact">
           <ContactSection />
         </section>
