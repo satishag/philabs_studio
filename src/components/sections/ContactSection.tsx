@@ -1,15 +1,13 @@
 import { motion } from "framer-motion";
 import { useInView } from "framer-motion";
 import { useRef } from "react";
-import { Mail, ArrowRight, Linkedin, Twitter, Instagram } from "lucide-react";
+import { Mail, ArrowRight, Linkedin,} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import philabsLogo from "@/assets/philabs-logo.png";
 
 const socialLinks = [
-  { icon: Twitter, href: "#", label: "Twitter" },
   { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Instagram, href: "#", label: "Instagram" },
 ];
 
 export const ContactSection = () => {

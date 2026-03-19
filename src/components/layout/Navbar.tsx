@@ -61,14 +61,6 @@ export const Navbar = () => {
           </nav>
           {/* Right-side actions: CTA + Theme toggle + Mobile menu */}
           <div className="flex items-center gap-3">
-            <div className="hidden md:block">
-              <Button 
-                variant="outline" 
-                className="border-primary/30 text-primary hover:bg-primary/10 hover:border-primary/50"
-              >
-                Get Started
-              </Button>
-            </div>
 
             {/* Theme toggle (reusable) */}
             <div className="flex items-center">
