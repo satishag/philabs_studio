@@ -17,7 +17,7 @@ const teamMembers = [
     linkedin: "https://www.linkedin.com/in/yashaswini-c-rao/",
     color: "#0891B2",
     accent: "#22D3EE",
-     },
+  },
   {
     name: "Varsha Shubhashri M",
     role: "Co-Founder",
@@ -25,7 +25,7 @@ const teamMembers = [
     linkedin: "https://www.linkedin.com/in/varsha-shubhashri-m-089893286/",
     color: "#D97706",
     accent: "#FCD34D",
-    },
+  },
   {
     name: "Monika R",
     role: "Co-Founder",
@@ -33,15 +33,15 @@ const teamMembers = [
     linkedin: "https://www.linkedin.com/in/monika-r-33a0192b9/",
     color: "#059669",
     accent: "#34D399",
-    },
+  },
   {
     name: "Satish A G",
-    role: "Founder",
+    role: "Co-Founder",
     image: satish_photo,
     linkedin: "https://www.linkedin.com/in/satish-ag/",
     color: "#7C3AED",
     accent: "#A78BFA",
-   },
+  },
 ];
 
 /* ---------------- TEAM CAROUSEL ---------------- */
